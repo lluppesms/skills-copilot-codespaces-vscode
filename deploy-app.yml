@@ -1,0 +1,28 @@
+# create a github action to send an email report based on a file at 6am every day
+# The file should be named deploy-app.yml
+# The email should contain the content of the file and the subject should be "Deployment Report"
+# The email should be sent to a test email address
+
+name: Deploy App
+on:
+  schedule:
+    - cron: '0 6 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Send email
+        uses: dawidd6/action-send-email@v2
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Deployment Report
+          body: ${{ steps.checkout-code.outputs.content }}
+          to:
+
